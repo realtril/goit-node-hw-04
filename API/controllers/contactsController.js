@@ -2,8 +2,8 @@ const contactsModel = require("../models/contactModel");
 
 async function getContacts(req, res, next) {
   try {
-    const result = await contactsModel.find();
-    res.status(200).json(result);
+    const { docs } = await contactsModel.paginate({}, req.query);
+    res.status(200).json(docs);
   } catch (error) {
     delete error.stack;
     next(error);
@@ -79,6 +79,19 @@ async function updateContact(req, res, next) {
     next(error);
   }
 }
+
+// async function getPaginatedContacts(req, res, next) {
+//   try {
+//     const options = {
+//       page: 1,
+//       limit: 20,
+//     };
+//     const result = await contactsModel.paginate({}, options);
+//     res.status(200).json(result);
+//   } catch (error) {
+//     next(error);
+//   }
+// }
 
 module.exports = {
   getContacts,

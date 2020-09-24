@@ -16,6 +16,7 @@ userRouter.post(
 );
 
 userRouter.post("/login", validateAuth(UserScheme), userController.logIn);
+
 userRouter.get(
   "/current",
   userController.authorize,

@@ -33,9 +33,7 @@ router.post(
 
 router.get("/", contactsController.getContacts);
 router.get("/:contactId", contactsController.getContact);
-
 router.delete("/:contactId", contactsController.deleteContact);
-
 router.patch(
   "/:contactId",
   validate(updateContactScheme),
