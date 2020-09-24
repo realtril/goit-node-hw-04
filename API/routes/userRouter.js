@@ -25,4 +25,10 @@ userRouter.get(
 
 userRouter.post("/logout", userController.authorize, userController.logOut);
 
+userRouter.patch(
+  "/",
+  userController.authorize,
+  userController.updateSubscription
+);
+
 module.exports = userRouter;

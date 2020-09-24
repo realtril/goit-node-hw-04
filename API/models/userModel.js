@@ -15,8 +15,6 @@ const userSchema = new Schema({
   },
 });
 
-exports.findUserByEmail = findUserByEmail;
-
 userSchema.statics.findUserByEmail = findUserByEmail;
 userSchema.statics.updateToken = updateToken;
 
@@ -31,5 +29,5 @@ async function updateToken(id, newToken) {
 }
 
 const userModel = mongoose.model("User", userSchema);
-
+exports.findUserByEmail = findUserByEmail;
 module.exports = userModel;

@@ -114,10 +114,36 @@ const getCurrentUser = async (req, res, next) => {
   }
 };
 
+const updateSubscription = async (req, res, next) => {
+  try {
+    const user = req.user;
+    const availableSubs = ["free", "pro", "premium"];
+    if (availableSubs.includes(req.body.subscription)) {
+      const updatedSubscription = await userModel.findByIdAndUpdate(
+        user._id,
+        { subscription: req.body.subscription },
+        {
+          new: true,
+        }
+      );
+      res.status(200).send(updatedSubscription);
+    } else {
+      res
+        .status(400)
+        .send({
+          message: "Please choose from the list of available subscriptions",
+        });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createUser,
   logIn,
   logOut,
   authorize,
   getCurrentUser,
+  updateSubscription,
 };

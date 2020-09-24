@@ -83,19 +83,6 @@ async function updateContact(req, res, next) {
   }
 }
 
-// async function getPaginatedContacts(req, res, next) {
-//   try {
-//     const options = {
-//       page: 1,
-//       limit: 20,
-//     };
-//     const result = await contactsModel.paginate({}, options);
-//     res.status(200).json(result);
-//   } catch (error) {
-//     next(error);
-//   }
-// }
-
 module.exports = {
   getContacts,
   getContact,
