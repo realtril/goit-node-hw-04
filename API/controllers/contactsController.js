@@ -2,6 +2,12 @@ const contactsModel = require("../models/contactModel");
 
 async function getContacts(req, res, next) {
   try {
+    if (req.query.sub) {
+      const filtered = await contactsModel.find({
+        subscription: req.query.sub,
+      });
+      return res.status(200).send(filtered);
+    }
     const { docs } = await contactsModel.paginate({}, req.query);
     res.status(200).json(docs);
   } catch (error) {
@@ -12,16 +18,13 @@ async function getContacts(req, res, next) {
 
 async function getContact(req, res, next) {
   try {
-    console.log(req);
     const { contactId } = req.params;
-    console.log(contactId);
     const contact = await contactsModel.findById(contactId);
     if (!contact) {
       return res.status(404).send({ message: "contact not found" });
     }
     res.status(200).send(contact);
   } catch (error) {
-    console.log(error);
     delete error.stack;
     next(error);
   }
