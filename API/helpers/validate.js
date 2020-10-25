@@ -1,5 +1,3 @@
-const { func } = require("joi");
-
 exports.validate = function validate(scheme, reqPart = "body") {
   return (req, res, next) => {
     const validationResult = scheme.validate(req[reqPart]);

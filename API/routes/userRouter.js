@@ -1,6 +1,9 @@
 const { Router } = require("express");
 const userController = require("../controllers/userController");
 const { validateAuth } = require("../helpers/validate");
+const { tcWrapper } = require("../helpers/helpers");
+const { updateImage } = require("../helpers/minimizeAndUpload");
+
 const userRouter = Router();
 const Joi = require("joi");
 
@@ -29,6 +32,13 @@ userRouter.patch(
   "/",
   userController.authorize,
   userController.updateSubscription
+);
+
+userRouter.patch(
+  "/avatars",
+  userController.authorize,
+  updateImage,
+  tcWrapper(userController.updateUserInfo)
 );
 
 module.exports = userRouter;

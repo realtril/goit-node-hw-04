@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
-const Joi = require("joi");
 const bcryptjs = require("bcryptjs");
 const userModel = require("../models/userModel");
+const { generateAvatar } = require("../helpers/avatarCreate");
 
 const createUser = async (req, res, next) => {
   try {
@@ -14,9 +14,12 @@ const createUser = async (req, res, next) => {
     if (existingUser) {
       return res.status(409).send("User with such email already exists");
     }
+    const avatarName = await generateAvatar();
+    const avatarPath = `http://localhost:${process.env.PORT}/images/${avatarName}`;
     const addedNewUser = await userModel.create({
       email,
       password: passwordHash,
+      avatarURL: avatarPath,
     });
 
     return res.status(201).json({
@@ -128,15 +131,32 @@ const updateSubscription = async (req, res, next) => {
       );
       res.status(200).send(updatedSubscription);
     } else {
-      res
-        .status(400)
-        .send({
-          message: "Please choose from the list of available subscriptions",
-        });
+      res.status(400).send({
+        message: "Please choose from the list of available subscriptions",
+      });
     }
   } catch (error) {
     next(error);
   }
+};
+
+const updateUserInfo = async (req, res, next) => {
+  const { user } = req;
+  const { file } = req;
+
+  const newImagePath = `http://localhost:3000/images/${file.filename}`;
+
+  const updatedImage = await userModel.findByIdAndUpdate(
+    user._id,
+    {
+      avatarURL: newImagePath,
+    },
+    { new: true }
+  );
+
+  res.status(200).send({
+    avatarURL: updatedImage.avatarURL,
+  });
 };
 
 module.exports = {
@@ -146,4 +166,5 @@ module.exports = {
   authorize,
   getCurrentUser,
   updateSubscription,
+  updateUserInfo,
 };
